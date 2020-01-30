@@ -17,4 +17,5 @@ def get_text(file):
 
 pdf_path = open('/home/madscientist/Downloads/graph.pdf', 'rb') 
 print(get_text(pdf_path))
+#hello
 
