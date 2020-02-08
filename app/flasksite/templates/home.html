@@ -1,9 +1,23 @@
 
 {% extends 'layout.html' %}
 {% block content %}
-    {% for post in posts %}
-	    <h1>{{ post.title }}</h1>
-	    <p>{{ post.author }}</p>
-    {% endfor %}
+<div class="container">
+<h4>Select any job category - </h4>
+<div class="dropdown">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Select
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" >Software Engineering</a>
+    <a class="dropdown-item">Data Scientist</a>
+    <a class="dropdown-item" >Backend Engineer</a>
+    <a class="dropdown-item" >Web developer</a>
+  </div>
+</div>
+<div align="center">
+<a href="{{ url_for('generate') }}" class="btn btn-info" role="button">Generate Profile</a>
+</div>
+</div>
+
 {% endblock content %}
 

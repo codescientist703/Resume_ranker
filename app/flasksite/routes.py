@@ -1,9 +1,9 @@
 from flasksite.models import User, Post
 from flasksite import app, db, bcrypt
 from flask import render_template, url_for, flash, redirect, request
-from flasksite.form import RegistrationForm, LoginForm
+from flasksite.form import RegistrationForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
-
+from flasksite.main import execute
 posts = [
 	{
 		'author' : 'Nihal Mittal',
@@ -18,8 +18,13 @@ def about():
 	return render_template('about.html')
 
 @app.route('/home')
+@login_required
 def home():
-	return render_template('home.html', posts=posts)
+	return render_template('home.html')
+
+@app.route('/generate')
+def generate():
+	return execute()
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -56,11 +61,22 @@ def login():
 @app.route('/logout')
 def logout():
 	logout_user()
-	return redirect(url_for('home'))
+	return redirect(url_for('about'))
 
-@app.route('/account')
+@app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-	return render_template('account.html',title='Account')
+	form = UpdateAccountForm()
+	if form.validate_on_submit():
+		current_user.username = form.username.data
+		current_user.email = form.email.data
+		db.session.commit()
+		flash('Your account has been updated!', 'success')
+		return redirect(url_for('account'))
+	elif request.method == 'GET':
+		form.username.data = current_user.username
+		form.email.data = current_user.email
+
+	return render_template('account.html',title='Account', form=form)
 
 
