@@ -1,3 +1,6 @@
 __pycache__/
 app/flasksite/__pycache__/
-profile.csv/
+create_profile.py/
+main.py/
+pypd.py/
+

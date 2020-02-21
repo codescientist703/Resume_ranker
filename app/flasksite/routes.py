@@ -4,6 +4,7 @@ from flask import render_template, url_for, flash, redirect, request
 from flasksite.form import RegistrationForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
 from flasksite.main import execute
+import pandas as pd
 posts = [
 	{
 		'author' : 'Nihal Mittal',
@@ -24,7 +25,10 @@ def home():
 
 @app.route('/generate')
 def generate():
-	return execute()
+	main_frame = pd.DataFrame()
+	main_frame = execute()
+
+	return render_template('views.html', tables=[main_frame.to_html(index=False)])
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

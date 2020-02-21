@@ -8,7 +8,7 @@ import pandas as pd
 from collections import Counter
 
 
-pdf_path = open('/home/madscientist/Downloads/docu.pdf', 'rb') 
+pdf_path = '/home/madscientist/Downloads/docu.pdf' 
 
 keyword_dict = pd.read_csv('keywords.csv')
 keyword_dict = keyword_dict.loc[:, ~keyword_dict.columns.str.contains('^Unnamed')]

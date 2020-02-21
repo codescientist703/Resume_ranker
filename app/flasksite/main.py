@@ -7,20 +7,31 @@ from io import StringIO
 import pandas as pd
 from collections import Counter
 
+mypath = '/home/madscientist/Desktop/Resume_ranker/resumes'
+onlyfiles = [os.path.join(mypath, f) for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
+
 def execute():
-	pdf_path = open('/home/madscientist/Downloads/docu.pdf', 'rb') 
-	keyword_dict = pd.read_csv('/home/madscientist/Downloads/keywords.csv')
+	 
+	keyword_dict = pd.read_csv('/home/madscientist/Desktop/Resume_ranker/csvs/keywords.csv')
 	keyword_dict = keyword_dict.loc[:, ~keyword_dict.columns.str.contains('^Unnamed')]
 	col_name = keyword_dict.columns.to_list()
-	col_name = ['Candidate Names'] + col_name
+	col_name = ['Candidate Names'] + col_name + ['Experience'] + ['Total Score']
 	#print(col_name)
 	main_frame = pd.DataFrame(columns=col_name)
-	main_frame.set_index('Candidate Names')
-	text = flasksite.pypd.get_text(pdf_path)
-	main_frame = create_profile(text,main_frame)
+	#main_frame.set_index('Candidate Names')
+	i = 0
+	while i < len(onlyfiles):
+		file = onlyfiles[i]
+		text = flasksite.pypd.get_text(file)
+		main_frame = create_profile(text,main_frame,file)
+		i += 1
+
 	#print(main_frame)
-	main_frame.to_csv('profile.csv', sep='\t', encoding='utf-8', index=False)
-	return "teri file ban gayi jake folder me check kar"
+	main_frame.set_index('Candidate Names')
+	main_frame['Total Score'] = main_frame['Total Score'].astype(int)
+	main_frame.sort_values(by=['Total Score'], ascending=False, inplace=True)
+	main_frame.to_csv('/home/madscientist/Desktop/Resume_ranker/profile/profile.csv', sep='\t', encoding='utf-8', index=False)
+	return main_frame
 
 
 

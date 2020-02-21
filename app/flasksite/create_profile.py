@@ -2,10 +2,12 @@ import pandas as pd
 import en_core_web_sm
 nlp = en_core_web_sm.load()
 from spacy.matcher import PhraseMatcher
+from pyresparser import ResumeParser
 
-def create_profile(text,main_frame):
+def create_profile(text,main_frame,file):
+	data = ResumeParser(file).get_extracted_data()
 	temp_frame = main_frame
-	keyword_dict = pd.read_csv('/home/madscientist/Downloads/keywords.csv')
+	keyword_dict = pd.read_csv('/home/madscientist/Desktop/Resume_ranker/csvs/keywords.csv')
 	keyword_dict = keyword_dict.loc[:, ~keyword_dict.columns.str.contains('^Unnamed')]
 	col_name = keyword_dict.columns.to_list()
 	words = []
@@ -29,13 +31,18 @@ def create_profile(text,main_frame):
 			d[rule_id] = 1
 	
 	nd = {}
-	nd['Candidate Names'] = 'Nihal'
+	nd['Candidate Names'] = data['name']
+	total = 0
 	for u in col_name:
 		if u not in d:
 			nd[u] = 0
 		else:
 			nd[u] = d[u]
+			total += d[u]
 
+	nd['Experience'] = data['total_experience']
+	total += data['total_experience']
+	nd['Total Score'] = total
 	temp_frame = temp_frame.append(nd, ignore_index=True)
 	return temp_frame
 	
