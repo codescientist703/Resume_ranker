@@ -12,22 +12,30 @@ posts = [
 	}
 
 ]
-
 @app.route('/')
 @app.route('/about')
 def about():
 	return render_template('about.html')
 
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
-	return render_template('home.html')
+	if request.method == "POST":
+		job_profile = str(request.form.get("cars", None))
+		if job_profile!=None:
+			main_frame = pd.DataFrame()
+			print(job_profile)
+			main_frame = execute(job_profile)
+			return render_template('views.html', tables=[main_frame.to_html(index=False)])
+
+	return render_template("home.html")
 
 @app.route('/generate')
 def generate():
 	main_frame = pd.DataFrame()
-	main_frame = execute()
-
+	print(job_profile)
+	main_frame = execute(job_profile)
+	
 	return render_template('views.html', tables=[main_frame.to_html(index=False)])
 
 @app.route('/register', methods=['GET', 'POST'])
