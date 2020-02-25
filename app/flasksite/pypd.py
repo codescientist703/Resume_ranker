@@ -22,6 +22,7 @@ def get_text(pdf_path):
     fake_file_handle.close()
     
     text = text.lower()
+    text = text.rstrip()
     return text
 
 

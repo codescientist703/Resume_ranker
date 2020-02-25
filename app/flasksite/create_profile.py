@@ -31,7 +31,7 @@ def create_profile(text,main_frame,file,csv_filename):
 			d[rule_id] = 1
 	
 	nd = {}
-	nd['Candidate Names'] = data['name']
+	nd['Candidate Names'] = data['name'].rstrip()
 	total = 0
 	for u in col_name:
 		if u not in d:
